@@ -1,0 +1,93 @@
+configuration:
+  config_mode:
+    name: Konfigurationskälla
+    description: Låt Home Assistant hantera alternativen eller behåll en befintlig config.toml orörd.
+  bbs_name:
+    name: BBS-namn
+    description: Namnet som visas för användarna.
+  welcome_message:
+    name: Välkomstmeddelande
+    description: Inloggningsmeddelande. Platshållaren {name} ersätts med BBS-namnet.
+  timezone:
+    name: Tidszon
+    description: IANA-tidszon för visade tider, exempelvis Europe/Stockholm.
+  require_verify:
+    name: Kräv verifiering
+    description: Kräv att Sysop eller Aide godkänner nya konton.
+  guest_room:
+    name: Gästrum
+    description: Valfritt rum för overifierade användare. Lämna tomt för strikt verifiering.
+  log_level:
+    name: Loggnivå
+    description: Grundnivå för Supply Drop BBS-loggar.
+  backup_enabled:
+    name: Automatiska säkerhetskopior
+    description: Skapa regelbundna ögonblicksbilder av databas och konfiguration.
+  backup_interval_hours:
+    name: Intervall för säkerhetskopiering
+    description: Antal timmar mellan automatiska säkerhetskopior.
+  meshcore_enabled:
+    name: Aktivera MeshCore
+    description: Starta den inbyggda MeshCore-transporten.
+  meshcore_connection_type:
+    name: MeshCore-anslutning
+    description: Direkt seriell anslutning, TCP CompanionFrameServer eller HAT-brygga.
+  meshcore_serial_port:
+    name: Seriell MeshCore-enhet
+    description: Använd helst en stabil sökväg under /dev/serial/by-id.
+  meshcore_baud_rate:
+    name: MeshCore-baudrate
+    description: Seriell hastighet, normalt 115200.
+  meshcore_tcp_address:
+    name: MeshCore TCP-adress
+    description: Värd och port för CompanionFrameServer.
+  meshcore_command_prefix:
+    name: MeshCore-kommandoprefix
+    description: Valfritt enskilt tecken, exempelvis !. Lämna tomt för att tolka alla direktmeddelanden som kommandon.
+  meshcore_path_bytes:
+    name: MeshCore path bytes
+    description: Använd 2 eller 3 byte för routingens path hash. Tre minskar kollisioner i täta mesh.
+  meshcore_flood_after_send:
+    name: Flood efter svar
+    description: Nollställ lagrad väg efter svar så framtida trafik kan floodas tillförlitligt.
+  meshcore_reply_max_attempts:
+    name: Svarsförsök
+    description: Totalt antal sändningar per svar. Behåll 1 om leveransbekräftelser inte fungerar stabilt.
+  meshtastic_enabled:
+    name: Aktivera Meshtastic
+    description: Starta den inbyggda Meshtastic-transporten.
+  meshtastic_connection_type:
+    name: Meshtastic-anslutning
+    description: Direkt seriell anslutning, HAT UART eller meshtasticd över TCP.
+  meshtastic_serial_port:
+    name: Seriell Meshtastic-enhet
+    description: Enhetssökväg för USB eller HAT UART.
+  meshtastic_baud_rate:
+    name: Meshtastic-baudrate
+    description: Seriell hastighet, normalt 115200.
+  meshtastic_tcp_address:
+    name: Meshtastic TCP-adress
+    description: Värd och port för meshtasticd.
+  meshtastic_command_prefix:
+    name: Meshtastic-kommandoprefix
+    description: Valfritt enskilt kommandotecken.
+  meshtastic_long_name:
+    name: Långt Meshtastic-namn
+    description: Radionodens visningsnamn, högst 39 tecken.
+  meshtastic_short_name:
+    name: Kort Meshtastic-namn
+    description: Radionodens kortnamn, högst 4 tecken.
+  web_enabled:
+    name: Aktivera webbadmin
+    description: Starta upstreams administratörsgränssnitt på port 8080.
+  web_external_origin:
+    name: Extern webborigin
+    description: Exakt HTTPS-origin vid omvänd proxy. Lämna tomt för lokal åtkomst.
+  web_cookie_secure:
+    name: Säkra cookies
+    description: Aktivera endast när webbgränssnittet används via HTTPS.
+  prometheus_enabled:
+    name: Prometheus-mätvärden
+    description: Exponera upstreams Prometheus-endpoint.
+network:
+  8080/tcp: Supply Drop BBS webbadmin

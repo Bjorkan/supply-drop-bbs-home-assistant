@@ -1,0 +1,109 @@
+name: Sync upstream release
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/scripts/upstream_release.py
+      - .github/workflows/sync-upstream.yaml
+      - supply-drop-bbs/config.yaml
+      - supply-drop-bbs/upstream-version.txt
+
+permissions:
+  contents: write
+  id-token: write
+  packages: write
+
+concurrency:
+  group: sync-supply-drop-bbs-upstream
+  cancel-in-progress: false
+
+jobs:
+  check:
+    name: Check upstream GitHub release
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.release.outputs.tag }}
+      version: ${{ steps.release.outputs.version }}
+      build_version: ${{ steps.release.outputs.build_version }}
+      update: ${{ steps.release.outputs.update }}
+      image_changed: ${{ steps.release.outputs.image_changed }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7.0.0
+
+      - name: Check latest stable upstream release
+        id: release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY_OWNER: ${{ github.repository_owner }}
+        run: |
+          python3 .github/scripts/upstream_release.py check \
+            --config supply-drop-bbs/config.yaml \
+            --upstream-version supply-drop-bbs/upstream-version.txt \
+            --owner "${REPOSITORY_OWNER}"
+
+  build-release:
+    name: Publish new upstream release images
+    needs: check
+    if: needs.check.outputs.update == 'true' || needs.check.outputs.image_changed == 'true'
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
+    uses: ./.github/workflows/build-app.yaml
+    with:
+      app: supply-drop-bbs
+      publish: true
+      version_override: ${{ needs.check.outputs.build_version }}
+      upstream_version_override: ${{ needs.check.outputs.version }}
+    secrets: inherit
+
+  publish-metadata:
+    name: Publish App update metadata
+    needs:
+      - check
+      - build-release
+    if: >-
+      always() &&
+      needs.check.result == 'success' &&
+      (needs.check.outputs.update == 'true' || needs.check.outputs.image_changed == 'true') &&
+      needs.build-release.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7.0.0
+        with:
+          ref: main
+
+      - name: Update App version, image, and changelog
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY_OWNER: ${{ github.repository_owner }}
+          EXPECTED_TAG: ${{ needs.check.outputs.tag }}
+        run: |
+          python3 .github/scripts/upstream_release.py update \
+            --config supply-drop-bbs/config.yaml \
+            --upstream-version supply-drop-bbs/upstream-version.txt \
+            --changelog supply-drop-bbs/CHANGELOG.md \
+            --owner "${REPOSITORY_OWNER}" \
+            --expected-tag "${EXPECTED_TAG}"
+
+      - name: Commit synchronized metadata
+        run: |
+          if git diff --quiet; then
+            echo "Repository metadata is already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            supply-drop-bbs/config.yaml \
+            supply-drop-bbs/upstream-version.txt \
+            supply-drop-bbs/CHANGELOG.md
+          git commit -m "chore: sync Supply Drop BBS ${{ needs.check.outputs.tag }} [skip app build]"
+          git push

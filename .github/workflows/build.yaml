@@ -1,0 +1,38 @@
+name: Build Home Assistant App
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - supply-drop-bbs/**
+      - .github/scripts/prepare_build.py
+      - .github/workflows/build-app.yaml
+      - .github/workflows/build.yaml
+  push:
+    branches:
+      - main
+    paths:
+      - supply-drop-bbs/**
+      - .github/scripts/prepare_build.py
+      - .github/workflows/build-app.yaml
+      - .github/workflows/build.yaml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+  packages: write
+
+concurrency:
+  group: build-supply-drop-bbs-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    if: github.event_name != 'push' || !contains(github.event.head_commit.message, '[skip app build]')
+    uses: ./.github/workflows/build-app.yaml
+    with:
+      app: supply-drop-bbs
+      publish: ${{ github.event_name != 'pull_request' }}
+    secrets: inherit

@@ -1,0 +1,93 @@
+configuration:
+  config_mode:
+    name: Configuration source
+    description: Let Home Assistant manage represented fields, or retain an existing config.toml unchanged.
+  bbs_name:
+    name: BBS name
+    description: Display name presented to users.
+  welcome_message:
+    name: Welcome message
+    description: Login banner. The placeholder {name} expands to the BBS name.
+  timezone:
+    name: Time zone
+    description: IANA time zone used for displayed timestamps, for example Europe/Stockholm.
+  require_verify:
+    name: Require user verification
+    description: Require a Sysop or Aide to approve newly registered accounts.
+  guest_room:
+    name: Guest room
+    description: Optional room available to unverified users. Leave empty for strict verification.
+  log_level:
+    name: Log level
+    description: Supply Drop BBS root log level.
+  backup_enabled:
+    name: Automatic backups
+    description: Enable periodic database and configuration snapshots.
+  backup_interval_hours:
+    name: Backup interval
+    description: Hours between automatic backups.
+  meshcore_enabled:
+    name: Enable MeshCore
+    description: Start the native MeshCore transport.
+  meshcore_connection_type:
+    name: MeshCore connection type
+    description: Direct serial, TCP CompanionFrameServer, or HAT bridge.
+  meshcore_serial_port:
+    name: MeshCore serial device
+    description: Prefer a stable /dev/serial/by-id path when available.
+  meshcore_baud_rate:
+    name: MeshCore baud rate
+    description: Serial line speed, normally 115200.
+  meshcore_tcp_address:
+    name: MeshCore TCP address
+    description: CompanionFrameServer host and port.
+  meshcore_command_prefix:
+    name: MeshCore command prefix
+    description: Optional single character such as !. Leave empty to treat all direct messages as commands.
+  meshcore_path_bytes:
+    name: MeshCore path bytes
+    description: Use 2 or 3 routing path-hash bytes. Three reduces collisions on dense meshes.
+  meshcore_flood_after_send:
+    name: Flood after send
+    description: Reset stored paths after replies so future unsolicited traffic can flood reliably.
+  meshcore_reply_max_attempts:
+    name: Reply attempts
+    description: Total transmissions per reply. Keep at 1 unless delivery confirmations work reliably.
+  meshtastic_enabled:
+    name: Enable Meshtastic
+    description: Start the native Meshtastic transport.
+  meshtastic_connection_type:
+    name: Meshtastic connection type
+    description: Direct serial, HAT UART, or meshtasticd TCP.
+  meshtastic_serial_port:
+    name: Meshtastic serial device
+    description: Serial or HAT UART device path.
+  meshtastic_baud_rate:
+    name: Meshtastic baud rate
+    description: Serial line speed, normally 115200.
+  meshtastic_tcp_address:
+    name: Meshtastic TCP address
+    description: meshtasticd host and port.
+  meshtastic_command_prefix:
+    name: Meshtastic command prefix
+    description: Optional single command character.
+  meshtastic_long_name:
+    name: Meshtastic long name
+    description: Radio node display name, up to 39 characters.
+  meshtastic_short_name:
+    name: Meshtastic short name
+    description: Radio node short name, up to 4 characters.
+  web_enabled:
+    name: Enable web administration
+    description: Start the upstream admin interface on port 8080.
+  web_external_origin:
+    name: External web origin
+    description: Exact HTTPS origin when using a reverse proxy. Leave empty for local access.
+  web_cookie_secure:
+    name: Secure cookies
+    description: Enable only when the web interface is accessed through HTTPS.
+  prometheus_enabled:
+    name: Prometheus metrics
+    description: Expose upstream Prometheus metrics.
+network:
+  8080/tcp: Supply Drop BBS web administration
