@@ -27,10 +27,10 @@ jobs:
       build_matrix: ${{ steps.matrix.outputs.matrix }}
       image_name: ${{ steps.normalize.outputs.image_name }}
       registry_prefix: ${{ steps.normalize.outputs.registry_prefix }}
-      version: ${{ steps.info.outputs.version }}
-      name: ${{ steps.info.outputs.name }}
-      description: ${{ steps.info.outputs.description }}
-      url: ${{ steps.info.outputs.url }}
+      version: ${{ steps.normalize.outputs.version }}
+      name: ${{ steps.normalize.outputs.name }}
+      description: ${{ steps.normalize.outputs.description }}
+      url: ${{ steps.normalize.outputs.url }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v7.0.0
@@ -54,13 +54,37 @@ jobs:
         with:
           path: ./${{ inputs.app }}
 
-      - name: Normalize image information
+      - name: Normalize App information
         id: normalize
         shell: bash
+        env:
+          IMAGE_JSON: ${{ steps.info.outputs.image }}
+          VERSION_JSON: ${{ steps.info.outputs.version }}
+          NAME_JSON: ${{ steps.info.outputs.name }}
+          DESCRIPTION_JSON: ${{ steps.info.outputs.description }}
+          URL_JSON: ${{ steps.info.outputs.url }}
         run: |
-          image='${{ steps.info.outputs.image }}'
-          echo "image_name=${image##*/}" >> "$GITHUB_OUTPUT"
-          echo "registry_prefix=${image%/*}" >> "$GITHUB_OUTPUT"
+          set -Eeuo pipefail
+
+          image=$(jq -er 'select(type == "string" and length > 0)' <<< "${IMAGE_JSON}")
+          version=$(jq -er 'select(type == "string" and length > 0)' <<< "${VERSION_JSON}")
+          name=$(jq -er 'select(type == "string" and length > 0)' <<< "${NAME_JSON}")
+          description=$(jq -er 'select(type == "string" and length > 0)' <<< "${DESCRIPTION_JSON}")
+          url=$(jq -er 'if . == null then "" else select(type == "string") end' <<< "${URL_JSON}")
+
+          if [[ "${image}" != */* ]]; then
+            echo "::error::Invalid App image reference: ${image}"
+            exit 1
+          fi
+
+          {
+            echo "image_name=${image##*/}"
+            echo "registry_prefix=${image%/*}"
+            echo "version=${version}"
+            echo "name=${name}"
+            echo "description=${description}"
+            echo "url=${url}"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Prepare multi-architecture matrix
         id: matrix
