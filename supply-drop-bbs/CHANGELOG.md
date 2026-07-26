@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.12.0-2
+
+- Avoid Supervisor `Range` validation entirely for numeric App options.
+- Accept numeric YAML values and digit strings through `match(^[0-9]+$)`.
+- Keep the actual numeric range checks in `generate_config.py`.
+
 ## 0.12.0-1
 
 - Avoid Home Assistant Supervisor's failing ranged-integer option validation.
