@@ -1,6 +1,6 @@
 name: Supply Drop BBS
 description: Mesh-first bulletin board server for MeshCore and Meshtastic networks
-version: "0.12.0"
+version: "0.12.0-1"
 slug: supply_drop_bbs
 url: https://github.com/Mesh-America/supply-drop-bbs
 image: ghcr.io/bjorkan/supply-drop-bbs-ha-app
@@ -63,20 +63,20 @@ schema:
   guest_room: str(0,80)
   log_level: list(TRACE|DEBUG|INFO|WARN|ERROR)
   backup_enabled: bool
-  backup_interval_hours: int(1,168)
+  backup_interval_hours: int
   meshcore_enabled: bool
   meshcore_connection_type: list(serial|tcp|hat)
   meshcore_serial_port: str(1,255)
-  meshcore_baud_rate: int(1200,4000000)
+  meshcore_baud_rate: int
   meshcore_tcp_address: str(3,255)
   meshcore_command_prefix: str(0,1)
-  meshcore_path_bytes: int(2,3)
+  meshcore_path_bytes: int
   meshcore_flood_after_send: bool
-  meshcore_reply_max_attempts: int(1,10)
+  meshcore_reply_max_attempts: int
   meshtastic_enabled: bool
   meshtastic_connection_type: list(serial|tcp|hat)
   meshtastic_serial_port: str(1,255)
-  meshtastic_baud_rate: int(1200,4000000)
+  meshtastic_baud_rate: int
   meshtastic_tcp_address: str(3,255)
   meshtastic_command_prefix: str(0,1)
   meshtastic_long_name: str(0,39)

@@ -1,0 +1,119 @@
+diff --git a/supply-drop-bbs/config.yaml b/supply-drop-bbs/config.yaml
+--- a/supply-drop-bbs/config.yaml
++++ b/supply-drop-bbs/config.yaml
+@@ -1,6 +1,6 @@
+ name: Supply Drop BBS
+ description: Mesh-first bulletin board server for MeshCore and Meshtastic networks
+-version: "0.12.0"
++version: "0.12.0-1"
+ slug: supply_drop_bbs
+ url: https://github.com/Mesh-America/supply-drop-bbs
+ image: ghcr.io/bjorkan/supply-drop-bbs-ha-app
+@@ -65,20 +65,20 @@ schema:
+   guest_room: str(0,80)
+   log_level: list(TRACE|DEBUG|INFO|WARN|ERROR)
+   backup_enabled: bool
+-  backup_interval_hours: int(1,168)
++  backup_interval_hours: int
+   meshcore_enabled: bool
+   meshcore_connection_type: list(serial|tcp|hat)
+   meshcore_serial_port: str(1,255)
+-  meshcore_baud_rate: int(1200,4000000)
++  meshcore_baud_rate: int
+   meshcore_tcp_address: str(3,255)
+   meshcore_command_prefix: str(0,1)
+-  meshcore_path_bytes: int(2,3)
++  meshcore_path_bytes: int
+   meshcore_flood_after_send: bool
+-  meshcore_reply_max_attempts: int(1,10)
++  meshcore_reply_max_attempts: int
+   meshtastic_enabled: bool
+   meshtastic_connection_type: list(serial|tcp|hat)
+   meshtastic_serial_port: str(1,255)
+-  meshtastic_baud_rate: int(1200,4000000)
++  meshtastic_baud_rate: int
+   meshtastic_tcp_address: str(3,255)
+   meshtastic_command_prefix: str(0,1)
+   meshtastic_long_name: str(0,39)
+diff --git a/supply-drop-bbs/generate_config.py b/supply-drop-bbs/generate_config.py
+--- a/supply-drop-bbs/generate_config.py
++++ b/supply-drop-bbs/generate_config.py
+@@ -41,6 +41,27 @@ def command_prefix(value: Any, option_name: str) -> str | None:
+     return parsed
+ 
+ 
++def integer_option(
++    options: dict[str, Any],
++    option_name: str,
++    minimum: int,
++    maximum: int,
++) -> int:
++    """Read and range-check one integer App option."""
++    raw_value = options.get(option_name)
++    if isinstance(raw_value, bool):
++        raise ValueError(f"{option_name} must be an integer")
++    try:
++        value = int(raw_value)
++    except (TypeError, ValueError) as error:
++        raise ValueError(f"{option_name} must be an integer") from error
++    if not minimum <= value <= maximum:
++        raise ValueError(
++            f"{option_name} must be between {minimum} and {maximum}, got {value}"
++        )
++    return value
++
++
+ def load_existing(path: pathlib.Path) -> dict[str, Any]:
+     if not path.exists() or path.stat().st_size == 0:
+         return {}
+@@ -86,7 +107,7 @@ def build_config(existing: dict[str, Any], options: dict[str, Any]) -> dict[str, Any]:
+     backup.update(
+         {
+             "enabled": bool(options["backup_enabled"]),
+-            "interval_hours": int(options["backup_interval_hours"]),
++            "interval_hours": integer_option(options, "backup_interval_hours", 1, 168),
+             "directory": "/data/backups",
+         }
+     )
+@@ -103,9 +124,13 @@ def build_config(existing: dict[str, Any], options: dict[str, Any]) -> dict[str, Any]:
+             "connection_type": str(options["meshcore_connection_type"]),
+             "addr": str(options["meshcore_tcp_address"]),
+             "serial_port": str(options["meshcore_serial_port"]),
+-            "baud_rate": int(options["meshcore_baud_rate"]),
+-            "path_bytes": int(options["meshcore_path_bytes"]),
++            "baud_rate": integer_option(
++                options, "meshcore_baud_rate", 1200, 4_000_000
++            ),
++            "path_bytes": integer_option(options, "meshcore_path_bytes", 2, 3),
+             "flood_after_send": bool(options["meshcore_flood_after_send"]),
+-            "reply_max_attempts": int(options["meshcore_reply_max_attempts"]),
++            "reply_max_attempts": integer_option(
++                options, "meshcore_reply_max_attempts", 1, 10
++            ),
+         }
+     )
+@@ -122,6 +147,8 @@ def build_config(existing: dict[str, Any], options: dict[str, Any]) -> dict[str, Any]:
+             "connection_type": str(options["meshtastic_connection_type"]),
+             "addr": str(options["meshtastic_tcp_address"]),
+             "serial_port": str(options["meshtastic_serial_port"]),
+-            "baud_rate": int(options["meshtastic_baud_rate"]),
++            "baud_rate": integer_option(
++                options, "meshtastic_baud_rate", 1200, 4_000_000
++            ),
+         }
+     )
+diff --git a/supply-drop-bbs/CHANGELOG.md b/supply-drop-bbs/CHANGELOG.md
+--- a/supply-drop-bbs/CHANGELOG.md
++++ b/supply-drop-bbs/CHANGELOG.md
+@@ -1,5 +1,11 @@
+ # Changelog
+ 
++## 0.12.0-1
++
++- Avoid Home Assistant Supervisor's failing ranged-integer option validation.
++- Preserve the same numeric limits in the App's own configuration generator.
++- Improve invalid-number errors by naming the affected option and accepted range.
++
+ ## 0.12.0
+ 
+ Initial Home Assistant App packaging of Supply Drop BBS 0.12.0.

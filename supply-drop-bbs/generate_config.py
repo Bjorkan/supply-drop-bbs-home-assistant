@@ -39,6 +39,27 @@ def command_prefix(value: Any, option_name: str) -> str | None:
     return parsed
 
 
+def integer_option(
+    options: dict[str, Any],
+    option_name: str,
+    minimum: int,
+    maximum: int,
+) -> int:
+    """Read and range-check one integer App option."""
+    raw_value = options.get(option_name)
+    if isinstance(raw_value, bool):
+        raise ValueError(f"{option_name} must be an integer")
+    try:
+        value = int(raw_value)
+    except (TypeError, ValueError) as error:
+        raise ValueError(f"{option_name} must be an integer") from error
+    if not minimum <= value <= maximum:
+        raise ValueError(
+            f"{option_name} must be between {minimum} and {maximum}, got {value}"
+        )
+    return value
+
+
 def load_existing(path: pathlib.Path) -> dict[str, Any]:
     if not path.exists() or path.stat().st_size == 0:
         return {}
@@ -84,7 +105,7 @@ def build_config(existing: dict[str, Any], options: dict[str, Any]) -> dict[str,
     backup.update(
         {
             "enabled": bool(options["backup_enabled"]),
-            "interval_hours": int(options["backup_interval_hours"]),
+            "interval_hours": integer_option(options, "backup_interval_hours", 1, 168),
             "directory": "/data/backups",
         }
     )
@@ -101,10 +122,14 @@ def build_config(existing: dict[str, Any], options: dict[str, Any]) -> dict[str,
             "connection_type": str(options["meshcore_connection_type"]),
             "addr": str(options["meshcore_tcp_address"]),
             "serial_port": str(options["meshcore_serial_port"]),
-            "baud_rate": int(options["meshcore_baud_rate"]),
-            "path_bytes": int(options["meshcore_path_bytes"]),
+            "baud_rate": integer_option(
+                options, "meshcore_baud_rate", 1200, 4_000_000
+            ),
+            "path_bytes": integer_option(options, "meshcore_path_bytes", 2, 3),
             "flood_after_send": bool(options["meshcore_flood_after_send"]),
-            "reply_max_attempts": int(options["meshcore_reply_max_attempts"]),
+            "reply_max_attempts": integer_option(
+                options, "meshcore_reply_max_attempts", 1, 10
+            ),
         }
     )
     prefix = command_prefix(options.get("meshcore_command_prefix"), "meshcore_command_prefix")
@@ -120,7 +145,9 @@ def build_config(existing: dict[str, Any], options: dict[str, Any]) -> dict[str,
             "connection_type": str(options["meshtastic_connection_type"]),
             "addr": str(options["meshtastic_tcp_address"]),
             "serial_port": str(options["meshtastic_serial_port"]),
-            "baud_rate": int(options["meshtastic_baud_rate"]),
+            "baud_rate": integer_option(
+                options, "meshtastic_baud_rate", 1200, 4_000_000
+            ),
         }
     )
     prefix = command_prefix(options.get("meshtastic_command_prefix"), "meshtastic_command_prefix")
