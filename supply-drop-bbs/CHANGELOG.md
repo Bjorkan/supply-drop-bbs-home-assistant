@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.12.0-3
+
+- Work around Home Assistant Supervisor bug #7044 affecting bounded string options.
+- Replace all `str(min,max)` schema entries with equivalent regex length validation.
+- Keep the same accepted text lengths without invoking Supervisor `Range`.
+
 ## 0.12.0-2
 
 - Avoid Supervisor `Range` validation entirely for numeric App options.
