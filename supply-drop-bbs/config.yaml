@@ -1,6 +1,6 @@
 name: Supply Drop BBS
 description: Mesh-first bulletin board server for MeshCore and Meshtastic networks
-version: "0.12.0-2"
+version: "0.12.0-3"
 slug: supply_drop_bbs
 url: https://github.com/Mesh-America/supply-drop-bbs
 image: ghcr.io/bjorkan/supply-drop-bbs-ha-app
@@ -56,32 +56,32 @@ options:
   prometheus_enabled: false
 schema:
   config_mode: list(home_assistant|file)
-  bbs_name: str(1,80)
-  welcome_message: str(0,500)
-  timezone: str(1,64)
+  bbs_name: 'match(^[\s\S]{1,80}$)'
+  welcome_message: 'match(^[\s\S]{0,500}$)'
+  timezone: 'match(^[\s\S]{1,64}$)'
   require_verify: bool
-  guest_room: str(0,80)
+  guest_room: 'match(^[\s\S]{0,80}$)'
   log_level: list(TRACE|DEBUG|INFO|WARN|ERROR)
   backup_enabled: bool
   backup_interval_hours: match(^[0-9]+$)
   meshcore_enabled: bool
   meshcore_connection_type: list(serial|tcp|hat)
-  meshcore_serial_port: str(1,255)
+  meshcore_serial_port: 'match(^[\s\S]{1,255}$)'
   meshcore_baud_rate: match(^[0-9]+$)
-  meshcore_tcp_address: str(3,255)
-  meshcore_command_prefix: str(0,1)
+  meshcore_tcp_address: 'match(^[\s\S]{3,255}$)'
+  meshcore_command_prefix: 'match(^[\s\S]{0,1}$)'
   meshcore_path_bytes: match(^[0-9]+$)
   meshcore_flood_after_send: bool
   meshcore_reply_max_attempts: match(^[0-9]+$)
   meshtastic_enabled: bool
   meshtastic_connection_type: list(serial|tcp|hat)
-  meshtastic_serial_port: str(1,255)
+  meshtastic_serial_port: 'match(^[\s\S]{1,255}$)'
   meshtastic_baud_rate: match(^[0-9]+$)
-  meshtastic_tcp_address: str(3,255)
-  meshtastic_command_prefix: str(0,1)
-  meshtastic_long_name: str(0,39)
-  meshtastic_short_name: str(0,4)
+  meshtastic_tcp_address: 'match(^[\s\S]{3,255}$)'
+  meshtastic_command_prefix: 'match(^[\s\S]{0,1}$)'
+  meshtastic_long_name: 'match(^[\s\S]{0,39}$)'
+  meshtastic_short_name: 'match(^[\s\S]{0,4}$)'
   web_enabled: bool
-  web_external_origin: str(0,255)
+  web_external_origin: 'match(^[\s\S]{0,255}$)'
   web_cookie_secure: bool
   prometheus_enabled: bool
