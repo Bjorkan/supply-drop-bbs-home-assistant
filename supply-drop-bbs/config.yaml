@@ -1,6 +1,6 @@
 name: Supply Drop BBS
 description: Mesh-first bulletin board server for MeshCore and Meshtastic networks
-version: "0.12.0-3"
+version: "1.0.1"
 slug: supply_drop_bbs
 url: https://github.com/Mesh-America/supply-drop-bbs
 image: ghcr.io/bjorkan/supply-drop-bbs-ha-app
