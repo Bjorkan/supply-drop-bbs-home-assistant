@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.1.0
+
+This Home Assistant App release packages the official [Supply Drop BBS v1.1.0](https://github.com/Mesh-America/supply-drop-bbs/releases/tag/v1.1.0).
+
+## [1.1.0] — 2026-09-07
+
+### Bug Fixes
+
+- Retry fixed-position writes dropped on a full admin channel ([`f6d8aa5`](f6d8aa562b5084f100ede3809f61ca357d8d6b4c))
+- Correct cargo-release config so `cargo release` actually works ([`7ae01dd`](7ae01dd23d204e9bcff437cbf59f44c4a4c45d95))
+
+### Features
+
+- Broadcast configured GPS position in MeshCore/Meshtastic adverts ([`087049e`](087049ed44cb9b9bfed4f70e81c8e5b29e9a52c5))
+
 ## 1.0.1
 
 This Home Assistant App release packages the official [Supply Drop BBS v1.0.1](https://github.com/Mesh-America/supply-drop-bbs/releases/tag/v1.0.1).
