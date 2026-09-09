@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.1.3
+
+This Home Assistant App release packages the official [Supply Drop BBS v1.1.3](https://github.com/Mesh-America/supply-drop-bbs/releases/tag/v1.1.3).
+
+## [1.1.3] — 2026-09-09
+
+### Bug Fixes
+
+- Force the SRC_DIR self-healing fetch (#248) ([`8520512`](8520512b8cf15e6e27f0d65641a004a9370e317e))
+
+### Chores
+
+- Update issue tracker export ([`c28a33a`](c28a33ad4997b379202fda86e636736467c56c27))
+- Update interaction log ([`8bdaae0`](8bdaae0d8bfc598aef2da4df9d9d5e7b18fbeca7))
+
 ## 1.1.0
 
 This Home Assistant App release packages the official [Supply Drop BBS v1.1.0](https://github.com/Mesh-America/supply-drop-bbs/releases/tag/v1.1.0).
