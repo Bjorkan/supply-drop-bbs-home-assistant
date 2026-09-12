@@ -1,5 +1,30 @@
 # Changelog
 
+## 1.2.0
+
+This Home Assistant App release packages the official [Supply Drop BBS v1.2.0](https://github.com/Mesh-America/supply-drop-bbs/releases/tag/v1.2.0).
+
+## [1.2.0] — 2026-09-11
+
+### Bug Fixes
+
+- Sanitize remaining bbs.name / remote-node display surfaces (#301) ([`8e7d16a`](8e7d16a088d1875980b32f1c7968289ae57a63b1))
+- Panic-safe table indexing, O_NOFOLLOW on .tmp, atomic side effects (#300) ([`344fe5d`](344fe5d46a7df20138e001715680e685323173d0))
+- Warn, not info, when a radio bridge connects with no SelfInfo (#299) ([`9789126`](9789126e8ddfb87f4dec6e9bea5689c49bf5e574))
+- Harden the self-heal git update block (#297) ([`f84086d`](f84086d8eb882ee51972e54203dbfb55d535a1e1))
+- Make location + share_in_advert writes atomic together ([`cc7782c`](cc7782c8350aee03d248c0315e26480a20398034))
+- Strip Unicode display-spoofing codepoints from node names ([`c7aba70`](c7aba70b1b3800f3357eaf9fc89e0b1706f084cf))
+
+### Chores
+
+- Sync issue tracker export (close 2nt, x1b duplicates) (#302) ([`7b8c335`](7b8c335dcd87c3e5edf84f66773a3c4011fb17ca))
+- Harden and document the release/CI workflow supply-chain posture (#298) ([`4a91a3f`](4a91a3ffb219ac43e2dfb7411c7a4d731dfae5ab))
+
+### Features
+
+- Add time-limited account suspension ("timeout") (#303) ([`996ecb8`](996ecb8da97a7371d545659eecedc976b9266e2a))
+- Add user ban/unban commands ([`ad19987`](ad19987998e27d93813f2f79972f3ea39976cc4e))
+
 ## 1.1.3
 
 This Home Assistant App release packages the official [Supply Drop BBS v1.1.3](https://github.com/Mesh-America/supply-drop-bbs/releases/tag/v1.1.3).
