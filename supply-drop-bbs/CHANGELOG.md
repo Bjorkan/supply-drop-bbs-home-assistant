@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.3.1
+
+This Home Assistant App release packages the official [Supply Drop BBS v1.3.1](https://github.com/Mesh-America/supply-drop-bbs/releases/tag/v1.3.1).
+
+## [1.3.1] — 2026-09-21
+
+### Bug Fixes
+
+- Make F <id> start at the message and work in reading mode, and skip blocked senders when reading (#356) ([`0724528`](0724528de42d629e7eb614f757bb88d7855ef511))
+
+### Chores
+
+- Sync issue tracker export (#358) ([`0294ef2`](0294ef2729230f87778264e2af451aa4b69f3ab5))
+
 ## 1.2.0
 
 This Home Assistant App release packages the official [Supply Drop BBS v1.2.0](https://github.com/Mesh-America/supply-drop-bbs/releases/tag/v1.2.0).
