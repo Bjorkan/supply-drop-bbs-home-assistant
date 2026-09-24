@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.4.1
+
+This Home Assistant App release packages the official [Supply Drop BBS v1.4.1](https://github.com/Mesh-America/supply-drop-bbs/releases/tag/v1.4.1).
+
+## [1.4.1] — 2026-09-23
+
+### Bug Fixes
+
+- Stop archive filenames and room names linking to Users ([`c8a1afd`](c8a1afdf8f54e7750a669e0fee2343971933f189))
+
 ## 1.3.1
 
 This Home Assistant App release packages the official [Supply Drop BBS v1.3.1](https://github.com/Mesh-America/supply-drop-bbs/releases/tag/v1.3.1).
